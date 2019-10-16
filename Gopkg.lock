@@ -2,20 +2,12 @@
 
 
 [[projects]]
-  digest = "1:b6526fa4c07838585a136c1a0d897daf598a20412cb3b933d340b8657b283101"
-  name = "github.com/DataDog/zstd"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "2347a397da4ee9c6b8226d4aff82c302d0e52773"
-  version = "v1.4.1"
-
-[[projects]]
-  digest = "1:eb44ca0314e275df1bf81bdc59fe1a122186d24f172be84077b40d34d93c6f56"
+  digest = "1:6a3120bd3297497861522b06ba0067f3b902434dceb5ae7bc90322b80cf729aa"
   name = "github.com/Shopify/sarama"
   packages = ["."]
   pruneopts = "UT"
-  revision = "46c83074a05474240f9620fb7c70fb0d80ca401a"
-  version = "v1.23.1"
+  revision = "1358e9c6e61694cd61b2daae79f5aa4b8073c976"
+  version = "v1.24.0"
 
 [[projects]]
   branch = "master"
@@ -98,7 +90,7 @@
   version = "v1.1.0"
 
 [[projects]]
-  digest = "1:877b9eedd8a92d456a213fe85fb8c6d178cb2bc499e86ec5b7f0bcc05d121e54"
+  digest = "1:e20a9d6598878d629e04541d96076bf232c1ee36f6b267c4a5dae7779f15c36a"
   name = "github.com/gogo/protobuf"
   packages = [
     "gogoproto",
@@ -106,8 +98,8 @@
     "protoc-gen-gogo/descriptor",
   ]
   pruneopts = "UT"
-  revision = "0ca988a254f991240804bf9821f3450d87ccbb1b"
-  version = "v1.3.0"
+  revision = "5628607bb4c51c3157aacc3a50f0ab707582b805"
+  version = "v1.3.1"
 
 [[projects]]
   digest = "1:74eb045b14d34d761b5cde0282b05e4f2bb70a5bac17612bc30aa4f0f8e7372e"
@@ -195,8 +187,8 @@
   name = "github.com/hashicorp/serf"
   packages = ["coordinate"]
   pruneopts = "UT"
-  revision = "15cfd05de3dffb3664aa37b06e91f970b825e380"
-  version = "v0.8.3"
+  revision = "1d3fdf93bbe5002c5023da50402368a817488691"
+  version = "v0.8.5"
 
 [[projects]]
   digest = "1:ae221758bdddd57f5c76f4ee5e4110af32ee62583c46299094697f8f127e63da"
@@ -208,6 +200,20 @@
   pruneopts = "UT"
   revision = "dc7c13fece037a4a36e2b3c69db4991498d30692"
   version = "v1.0.0"
+
+[[projects]]
+  digest = "1:b3ee801604856739d1005c9c19def743f75178884e17106a2269f0dcc797977c"
+  name = "github.com/klauspost/compress"
+  packages = [
+    "fse",
+    "huff0",
+    "snappy",
+    "zstd",
+    "zstd/internal/xxhash",
+  ]
+  pruneopts = "UT"
+  revision = "da9470192e5d0ad619defde5ded583e5e907d3e8"
+  version = "v1.8.6"
 
 [[projects]]
   digest = "1:5d231480e1c64a726869bc4142d270184c419749d34f167646baa21008eb0a79"
@@ -227,7 +233,7 @@
 
 [[projects]]
   branch = "voltha-2.1"
-  digest = "1:795dd43b23959662cb93a0d1d1658e127b9f0c0559191eecb077e2986e4dd7a0"
+  digest = "1:e95014fe950cb900f07a7fc3bb10ac626f22e79dda99a74b6f5b4961a3d20ae1"
   name = "github.com/opencord/voltha-go"
   packages = [
     "adapters",
@@ -235,6 +241,7 @@
     "adapters/common",
     "common/log",
     "common/ponresourcemanager",
+    "common/probe",
     "common/techprofile",
     "db/kvstore",
     "db/model",
@@ -242,7 +249,7 @@
     "rw_core/utils",
   ]
   pruneopts = "UT"
-  revision = "056aa9518661f793e7bcd0af2fa5d90a81b73a1f"
+  revision = "cc40904e208892dea8e1a2a73b52e6465d3c6d59"
 
 [[projects]]
   digest = "1:bc21a70b7c12a8d8c2b008d2d61a313bf4ed8f021be84d815f744a869e69c96f"
@@ -257,8 +264,8 @@
     "go/voltha",
   ]
   pruneopts = "UT"
-  revision = "78ea333b402a315e5d755cb438fc842d8449882a"
-  version = "1.0.1"
+  revision = "b6b797cceae987556bc705acc6273b1c7e43ce05"
+  version = "v1.0.3"
 
 [[projects]]
   digest = "1:cef870622e603ac1305922eb5d380455cad27e354355ae7a855d8633ffa66197"
@@ -281,7 +288,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:8581cbc7002abc2f1f6c04e518bd8e34ae254e614ab37fa2ffbaf80cc87f13a5"
+  digest = "1:871d55c30b824597036b1e4b99fdedac1dd9f319a4351bdab98617b6f450f125"
   name = "go.etcd.io/etcd"
   packages = [
     "auth/authpb",
@@ -306,7 +313,7 @@
     "raft/tracker",
   ]
   pruneopts = "UT"
-  revision = "838315283d9e7ab58d83482bf9bab2e88a4707e4"
+  revision = "bcc147127d1a33d827f78a0d1bf8fe2363a344f2"
 
 [[projects]]
   digest = "1:a5158647b553c61877aa9ae74f4015000294e47981e6b8b07525edcbb0747c81"
@@ -317,12 +324,12 @@
   version = "v1.4.0"
 
 [[projects]]
-  digest = "1:60bf2a5e347af463c42ed31a493d817f8a72f102543060ed992754e689805d1a"
+  digest = "1:ed14edb4b5ec8eff801b1e8217ffaf021729c5a1dee9d940af5bb3302ab7297d"
   name = "go.uber.org/multierr"
   packages = ["."]
   pruneopts = "UT"
-  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
-  version = "v1.1.0"
+  revision = "71e610a0e48dbda460d9c18adca8b5f2de04a7c1"
+  version = "v1.2.0"
 
 [[projects]]
   digest = "1:676160e6a4722b08e0e26b11521d575c2cb2b6f0c679e1ee6178c5d8dee51e5e"
@@ -348,11 +355,11 @@
     "pbkdf2",
   ]
   pruneopts = "UT"
-  revision = "227b76d455e791cb042b03e633e2f7fbcfdf74a5"
+  revision = "87dc89f01550277dc22b74ffcf4cd89fa2f40f4c"
 
 [[projects]]
   branch = "master"
-  digest = "1:eb74ffd1e64e83aa95e5e1cdba6922d676a0ca2c66fd20a77b19a3edd524ab74"
+  digest = "1:01b4b713173565fe757b6049492eef37ff0b4954ac0e4a01ca5774da6e7135f5"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -366,15 +373,15 @@
     "trace",
   ]
   pruneopts = "UT"
-  revision = "c8589233b77dde5edd2205ba8a4fb5c9c2472556"
+  revision = "da9a3fd4c5820e74b24a6cb7fb438dc9b0dd377c"
 
 [[projects]]
   branch = "master"
-  digest = "1:ec9d9815894f067c7878330735b9e4dfa6dc61234d2ba136b60a1436d6b5ea94"
+  digest = "1:7c927f17d868be652a4cfe7de23e4292dea5b14d974a1d536e3b7cb7e79fd695"
   name = "golang.org/x/sys"
   packages = ["unix"]
   pruneopts = "UT"
-  revision = "b4ddaad3f8a36719f2b8bc6486c14cc468ca2bb5"
+  revision = "b09406accb4736d857a32bf9444cd7edae2ffa79"
 
 [[projects]]
   digest = "1:8d8faad6b12a3a4c819a3f9618cb6ee1fa1cfc33253abeeea8b55336721e3405"
@@ -403,17 +410,17 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:21a386effcf814b07fda8b1f53b96a5b355f556b495e0aeeafe9c29a390137a8"
+  digest = "1:47f71acc1fcf36eab181789c2c0735ddcaa22592091a551375c841a912a0a1df"
   name = "google.golang.org/genproto"
   packages = [
     "googleapis/api/annotations",
     "googleapis/rpc/status",
   ]
   pruneopts = "UT"
-  revision = "f660b865573183437d2d868f703fe88bb8af0b55"
+  revision = "548a555dbc03994223efbaba0090152849259498"
 
 [[projects]]
-  digest = "1:2e18183989c76d073e9088f1a56f8b1c46ca920b74b529a50c2d7e5877ff18ac"
+  digest = "1:6cd77d0b616d2dcebd363dfecba593f27b0151fc82cdb5fbfb96c5a7cfbc95b5"
   name = "google.golang.org/grpc"
   packages = [
     ".",
@@ -451,16 +458,8 @@
     "tap",
   ]
   pruneopts = "UT"
-  revision = "39e8a7b072a67ca2a75f57fa2e0d50995f5b22f6"
-  version = "v1.23.1"
-
-[[projects]]
-  digest = "1:eb44ca0314e275df1bf81bdc59fe1a122186d24f172be84077b40d34d93c6f56"
-  name = "gopkg.in/Shopify/sarama.v1"
-  packages = ["."]
-  pruneopts = "UT"
-  revision = "46c83074a05474240f9620fb7c70fb0d80ca401a"
-  version = "v1.23.1"
+  revision = "f6d0f9ee430895e87ef1ceb5ac8f39725bafceef"
+  version = "v1.24.0"
 
 [[projects]]
   digest = "1:c902038ee2d6f964d3b9f2c718126571410c5d81251cbab9fe58abd37803513c"
@@ -541,6 +540,7 @@
     "github.com/opencord/voltha-go/adapters/common",
     "github.com/opencord/voltha-go/common/log",
     "github.com/opencord/voltha-go/common/ponresourcemanager",
+    "github.com/opencord/voltha-go/common/probe",
     "github.com/opencord/voltha-go/common/techprofile",
     "github.com/opencord/voltha-go/db/kvstore",
     "github.com/opencord/voltha-go/db/model",

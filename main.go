@@ -27,11 +27,11 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/opencord/voltha-go/adapters/adapterif"
-
 	"github.com/opencord/voltha-go/adapters"
+	"github.com/opencord/voltha-go/adapters/adapterif"
 	com "github.com/opencord/voltha-go/adapters/common"
 	"github.com/opencord/voltha-go/common/log"
+	"github.com/opencord/voltha-go/common/probe"
 	"github.com/opencord/voltha-go/db/kvstore"
 	"github.com/opencord/voltha-go/kafka"
 	ac "github.com/opencord/voltha-openolt-adapter/adaptercore"
@@ -71,6 +71,19 @@ func newAdapter(cf *config.AdapterFlags) *adapter {
 }
 
 func (a *adapter) start(ctx context.Context) {
+
+	var p *probe.Probe
+	if value := ctx.Value(probe.ProbeContextKey); value != nil {
+		if _, ok := value.(*probe.Probe); ok {
+			p = value.(*probe.Probe)
+			p.RegisterService("message-bus",
+				"kv-store",
+				"core-request-handler",
+				"register-with-core",
+				"inter-container-proxy")
+		}
+	}
+
 	log.Info("Starting Core Adapter components")
 	var err error
 
@@ -80,14 +93,26 @@ func (a *adapter) start(ctx context.Context) {
 		log.Fatal("error-setting-kv-client")
 	}
 
+	if p != nil {
+		p.UpdateStatus("kv-store", probe.ServiceStatusRunning)
+	}
+
 	// Setup Kafka Client
 	if a.kafkaClient, err = newKafkaClient("sarama", a.config.KafkaAdapterHost, a.config.KafkaAdapterPort); err != nil {
 		log.Fatal("Unsupported-common-client")
 	}
 
+	if p != nil {
+		p.UpdateStatus("message-bus", probe.ServiceStatusRunning)
+	}
+
 	// Start the common InterContainer Proxy - retries indefinitely
 	if a.kip, err = a.startInterContainerProxy(-1); err != nil {
 		log.Fatal("error-starting-inter-container-proxy")
+	}
+
+	if p != nil {
+		p.UpdateStatus("inter-container-proxy", probe.ServiceStatusRunning)
 	}
 
 	// Create the core proxy to handle requests to the Core
@@ -107,7 +132,7 @@ func (a *adapter) start(ctx context.Context) {
 	}
 
 	// Register the core request handler
-	if err = a.setupRequestHandler(a.instanceID, a.iAdapter); err != nil {
+	if err = a.setupRequestHandler(ctx, a.instanceID, a.iAdapter); err != nil {
 		log.Fatal("error-setting-core-request-handler")
 	}
 
@@ -115,9 +140,12 @@ func (a *adapter) start(ctx context.Context) {
 	if err = a.registerWithCore(-1); err != nil {
 		log.Fatal("error-registering-with-core")
 	}
+	if p != nil {
+		p.UpdateStatus("register-with-core", probe.ServiceStatusRunning)
+	}
 }
 
-func (a *adapter) stop() {
+func (a *adapter) stop(ctx context.Context) {
 	// Stop leadership tracking
 	a.halted = true
 
@@ -206,7 +234,6 @@ func (a *adapter) startInterContainerProxy(retries int) (*kafka.InterContainerPr
 			break
 		}
 	}
-
 	log.Info("common-messaging-proxy-created")
 	return kip, nil
 }
@@ -227,7 +254,7 @@ func (a *adapter) startOpenOLT(ctx context.Context, kip *kafka.InterContainerPro
 	return sOLT, nil
 }
 
-func (a *adapter) setupRequestHandler(coreInstanceID string, iadapter adapters.IAdapter) error {
+func (a *adapter) setupRequestHandler(ctx context.Context, coreInstanceID string, iadapter adapters.IAdapter) error {
 	log.Info("setting-request-handler")
 	requestProxy := com.NewRequestHandlerProxy(coreInstanceID, iadapter, a.coreProxy)
 	if err := a.kip.SubscribeWithRequestHandlerInterface(kafka.Topic{Name: a.config.Topic}, requestProxy); err != nil {
@@ -235,6 +262,7 @@ func (a *adapter) setupRequestHandler(coreInstanceID string, iadapter adapters.I
 		return err
 
 	}
+	probe.UpdateStatusFromContext(ctx, "core-request-handler", probe.ServiceStatusRunning)
 	log.Info("request-handler-setup-done")
 	return nil
 }
@@ -322,12 +350,12 @@ func main() {
 	// Setup logging
 
 	// Setup default logger - applies for packages that do not have specific logger set
-	if _, err := log.SetDefaultLogger(log.JSON, cf.LogLevel, log.Fields{"instanceId": cf.InstanceID}); err != nil {
+	if _, err := log.SetDefaultLogger(log.JSON, cf.LogLevel, log.Fields{"instanceID": cf.InstanceID}); err != nil {
 		log.With(log.Fields{"error": err}).Fatal("Cannot setup logging")
 	}
 
 	// Update all loggers (provisionned via init) with a common field
-	if err := log.UpdateAllLoggers(log.Fields{"instanceId": cf.InstanceID}); err != nil {
+	if err := log.UpdateAllLoggers(log.Fields{"instanceID": cf.InstanceID}); err != nil {
 		log.With(log.Fields{"error": err}).Fatal("Cannot setup logging")
 	}
 
@@ -348,18 +376,25 @@ func main() {
 
 	log.Infow("config", log.Fields{"config": *cf})
 
+	// create new adapter
+	ad := newAdapter(cf)
+
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 
-	ad := newAdapter(cf)
-	go ad.start(ctx)
+	p := &probe.Probe{}
+	go p.ListenAndServe(fmt.Sprintf("%s:%d", ad.config.ProbeHost, ad.config.ProbePort))
+
+	probeCtx := context.WithValue(ctx, probe.ProbeContextKey, p)
+
+	go ad.start(probeCtx)
 
 	code := waitForExit()
 	log.Infow("received-a-closing-signal", log.Fields{"code": code})
 
 	// Cleanup before leaving
-	ad.stop()
+	ad.stop(probeCtx)
 
 	elapsed := time.Since(start)
-	log.Infow("run-time", log.Fields{"instanceId": ad.config.InstanceID, "time": elapsed / time.Second})
+	log.Infow("run-time", log.Fields{"instanceID": ad.config.InstanceID, "time": elapsed / time.Second})
 }
