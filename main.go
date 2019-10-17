@@ -145,7 +145,7 @@ func (a *adapter) start(ctx context.Context) {
 	}
 }
 
-func (a *adapter) stop(ctx context.Context) {
+func (a *adapter) stop() {
 	// Stop leadership tracking
 	a.halted = true
 
@@ -393,7 +393,7 @@ func main() {
 	log.Infow("received-a-closing-signal", log.Fields{"code": code})
 
 	// Cleanup before leaving
-	ad.stop(probeCtx)
+	ad.stop()
 
 	elapsed := time.Since(start)
 	log.Infow("run-time", log.Fields{"instanceID": ad.config.InstanceID, "time": elapsed / time.Second})
