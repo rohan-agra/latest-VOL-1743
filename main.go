@@ -350,12 +350,12 @@ func main() {
 	// Setup logging
 
 	// Setup default logger - applies for packages that do not have specific logger set
-	if _, err := log.SetDefaultLogger(log.JSON, cf.LogLevel, log.Fields{"instanceID": cf.InstanceID}); err != nil {
+	if _, err := log.SetDefaultLogger(log.JSON, cf.LogLevel, log.Fields{"instanceId": cf.InstanceID}); err != nil {
 		log.With(log.Fields{"error": err}).Fatal("Cannot setup logging")
 	}
 
 	// Update all loggers (provisionned via init) with a common field
-	if err := log.UpdateAllLoggers(log.Fields{"instanceID": cf.InstanceID}); err != nil {
+	if err := log.UpdateAllLoggers(log.Fields{"instanceId": cf.InstanceID}); err != nil {
 		log.With(log.Fields{"error": err}).Fatal("Cannot setup logging")
 	}
 
@@ -396,5 +396,5 @@ func main() {
 	ad.stop()
 
 	elapsed := time.Since(start)
-	log.Infow("run-time", log.Fields{"instanceID": ad.config.InstanceID, "time": elapsed / time.Second})
+	log.Infow("run-time", log.Fields{"instanceId": ad.config.InstanceID, "time": elapsed / time.Second})
 }
